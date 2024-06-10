@@ -1,0 +1,13 @@
+{% extends "base.html" %} 
+{% block content %}
+<h2>Welcome to the US Civics Test</h2>
+<h1>Questions:</h1>
+<ul>
+    {% for q in question_list %}
+    
+        <li><a href="/questions/{{ q.number }}/">{{ q.question_text }}</a></li>
+    
+    {% endfor %}
+</ul>
+
+{% endblock content %}

@@ -24,15 +24,15 @@ def question_detail_view( request, id=None ):
 
     return render(request,'questions/detail.html',context=context)
 
-def article_detail_view(request, id=None):
-    article_obj = None
-    if id is not None:
-        article_obj = Article.objects.get(id=id)
+# def article_detail_view(request, id=None):
+#     article_obj = None
+#     if id is not None:
+#         article_obj = Article.objects.get(id=id)
 
-    context = {
-        'title': article_obj.title,
-        'id': article_obj.id,
-        'content': article_obj.content
-    }
+#     context = {
+#         'title': article_obj.title,
+#         'id': article_obj.id,
+#         'content': article_obj.content
+#     }
 
-    return render(request,'articles/detail.html',context=context)
+#     return render(request,'articles/detail.html',context=context)
