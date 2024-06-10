@@ -5,7 +5,7 @@
 <ul>
     {% for q in question_list %}
     
-        <li><a href="/questions/{{ q.number }}/">{{ q.question_text }}</a></li>
+        <li>{{ q.question_text }} [<a href="/questions/{{ q.number }}/">view</a> | <a href="/questions/ask/{{ q.number }}/">ask</a>]</li>
     
     {% endfor %}
 </ul>

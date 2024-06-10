@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>{{ section }} - {{ id }}</h1>
+<p>{{ question_text }}</p>
+<form action='.' method="POST">
+    {% csrf_token %}
+    <div style="margin-top:10px;">
+        <textarea name="question_response" placeholder="Type your answer here"></textarea>
+    </div>
+    <button style="margin-top: 30px;" type="submit">Submit!</button>
+</form>
+
+{% if submitted %}
+<h2>Possible Answers</h2>
+<p>
+    {% for answer in possible_answers %}
+
+    <li>{{ answer }}</li>
+
+    {% endfor %}
+</p>
+{% endif %}
+
+{% endblock content %}
