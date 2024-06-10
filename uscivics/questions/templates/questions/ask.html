@@ -14,11 +14,22 @@
 {% if submitted %}
 <h2>Possible Answers</h2>
 <p>
-    {% for answer in possible_answers %}
+    <ul>
+        {% for answer in possible_answers %}
 
-    <li>{{ answer }}</li>
+        <li>{{ answer }}</li>
 
-    {% endfor %}
+        {% endfor %}
+    </ul>
+</p>
+
+<p>
+    <form action='.' method="POST">
+        {% csrf_token %}
+        <h2>Did you get this question correct?</h2>
+        <button style="margin-top: 30px;" type="submit">Yes!</button>
+        <button style="margin-top: 30px;" type="submit">No, not yet</button>
+    </form>
 </p>
 {% endif %}
 

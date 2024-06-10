@@ -3,6 +3,15 @@
 
 <h1>{{ section }} - {{ id }}</h1>
 <p>{{ question_text }}</p>
-<p>{{ possible_answers }}</p>
+<h2>Possible Answers</h2>
+<p>
+    <ul>
+        {% for answer in possible_answers %}
+
+        <li>{{ answer }}</li>
+
+        {% endfor %}
+    </ul>
+</p>
 
 {% endblock content %}
