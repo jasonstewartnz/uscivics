@@ -315,14 +315,14 @@
                 "number": 38,
                 "question text": "What is the highest court in the United States? ",
                 "possible answers": [
-                    "the Supreme Court "
+                    "the Supreme Court"
                 ]
             },
             {
                 "number": 39,
                 "question text": "How many justices are on the Supreme Court? ",
                 "possible answers": [
-                    9
+                    "9"
                 ]
             },
             {
