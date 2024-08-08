@@ -21,9 +21,10 @@ def main():
 
         for q_idx in range(len(questions)):
             answer_list = questions[q_idx]['possible answers']
-            questions[q_idx]['possible answers'] = ';'.join(answer_list)
+            questions[q_idx]['possible answers'] = '\n'.join(answer_list)
 
         questions_df = pd.DataFrame(questions)
+        questions_df.set_index('number',inplace=True)
         
         st.write(section)
         st.write(questions_df)
