@@ -12,15 +12,17 @@ def main():
     test = CivicsTest.from_file()
     sections = test.list_sections()
 
-    st.session_state['section_name'] = sections[0]
-
-
+    # st.session_state['section_name'] = sections[0]
+    
     def section_select(section_name):
 
-        section = section_name
-        # section = st.session_state['section-selector']
-        questions = test.get_section_questions(section)
+        st.session_state['section_name'] = section_name
 
+    def test_section(section_name):
+        
+        questions = test.get_section_questions(section_name)
+        st.html('<div>')
+        st.write(section_name)
         for q_idx in range(len(questions)):
             qst = questions[q_idx]
             
@@ -29,25 +31,45 @@ def main():
             )
             st.subheader('Possible Answers')
             st.text('\n'.join(qst['possible answers']))
-
-
-        questions_df = pd.DataFrame(questions)
-        questions_df.set_index('number',inplace=True)
-        
-
-        st.write(section)
-        st.write(questions_df)
+        st.html('</div>')
         # print(section)        
         # print(dumps(questions,indent=4))
+
+
+    def show_section_questions(section_name):
+        questions = test.get_section_questions(section_name)
+        questions_df = pd.DataFrame(questions)
+        questions_df.set_index('number',inplace=True)
+        st.write(questions_df)
+
 
 
     def update_app():
     
         st.write('Welcome to the US Civics Test!')
-        section = st.selectbox('Which section would you like?', options=sections, index=0, key='section-selector', help='Choose section' ) # on_change=section_select_callback
-        section_select(section)
 
+        # section selector
+        if 'section_name' not in st.session_state:
+            section_index=0
+            st.session_state['section_name'] = sections[section_index]
+        else: 
+            section_index = sections.index(st.session_state['section_name'])
 
+        print(f"Section {section_index}: {st.session_state['section_name']}")
+        section = st.selectbox('Which section would you like?', options=sections, index=section_index, key='section-selector', help='Choose section' ) # on_change=section_select_callback
+
+        section_action = None
+        # Buttons for section actions
+        if st.button("Questions"):
+            section_action = show_section_questions
+
+        if st.button("Test me!"):
+            section_action = test_section
+
+        if section_action is not None:
+            st.html('<div>')
+            section_action(st.session_state['section_name'])
+            st.html('</div>')
 
     update_app()
 
