@@ -5,6 +5,8 @@ from uscivics.questions.civics_test import CivicsTest
 import streamlit as st
 from json import dumps
 import pandas as pd
+from question_grader import QuestionGrader
+
 
 
 def main():
@@ -16,6 +18,10 @@ def main():
     if 'test_in_progress' not in st.session_state:
         st.session_state['test_in_progress'] = False
 
+    if 'grader' not in st.session_state:
+        grader = QuestionGrader()
+    
+
     # st.session_state['section_name'] = sections[0]
     
     # def section_select(section_name):
@@ -23,8 +29,11 @@ def main():
     #     st.session_state['section_name'] = section_name
 
 
-    def reveal_answer(question_number):
+    def reveal_answer(question_number, response_txt):
         st.session_state[f'reveal-question-{question_number}'] = True
+        # response_key = f"question-response-area-{question_number}"
+        # st.session_state[response_key] = response_txt
+
 
     def test_section(section_name):
                 
@@ -36,18 +45,34 @@ def main():
         for q_idx in range(len(questions)):
             qst = questions[q_idx]
             question_number = qst['number']
-            
-            txt = st.text_area(f"{question_number}: {qst['question text']}",
-                'Answer here',
-                key=f"question-response-area-{question_number}"
-            )
-            st.button('Submit Answer',key=f"submit-question-button-{question_number}",on_click=reveal_answer,args=[question_number])
-
+            response_key = f"question-response-area-{question_number}"
             answer_reveal_key = f'reveal-question-{question_number}'
+            
+            print(f"response key: {response_key}")
+            if response_key is st.session_state:
+                text_value = st.session_state[response_key]
+            else: 
+                print('Could not find response key. Using default')
+                text_value = 'Answer here'
+
+            response_txt = st.text_area(f"{question_number}: {qst['question text']}",
+                text_value,
+                key=response_key
+            )
+            st.button('Submit Answer',key=f"submit-question-button-{question_number}",on_click=reveal_answer,args=[question_number,response_txt])
+
             
             if (answer_reveal_key in st.session_state) and st.session_state[answer_reveal_key]:
                 st.subheader('Possible Answers')
                 st.text('\n'.join(qst['possible answers']))
+
+                print(f'Response: {st.session_state[response_key]}')
+                
+                response_correctness = grader.check_response(questions[q_idx], st.session_state[response_key] )
+
+                st.session_state[response_key+'-correctness'] = response_correctness
+
+                st.text(response_correctness)
         
         # print(section)        
         # print(dumps(questions,indent=4))
@@ -58,6 +83,9 @@ def main():
             qst = questions[q_idx]
             question_number = qst['number']
             st.session_state[f'reveal-question-{question_number}'] = False
+            response_key = f"question-response-area-{question_number}"
+            if response_key in st.session_state:
+                del st.session_state[response_key]
 
     def show_section_questions(section_name):
         st.subheader('Section Questions')
