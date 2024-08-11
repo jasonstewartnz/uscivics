@@ -18,9 +18,10 @@ def main():
 
     # st.session_state['section_name'] = sections[0]
     
-    def section_select(section_name):
+    # def section_select(section_name):
 
-        st.session_state['section_name'] = section_name
+    #     st.session_state['section_name'] = section_name
+
 
     def reveal_answer(question_number):
         st.session_state[f'reveal-question-{question_number}'] = True
@@ -50,7 +51,13 @@ def main():
         
         # print(section)        
         # print(dumps(questions,indent=4))
+    def reset_test(section_name):
+        questions = test.get_section_questions(section_name)        
 
+        for q_idx in range(len(questions)):
+            qst = questions[q_idx]
+            question_number = qst['number']
+            st.session_state[f'reveal-question-{question_number}'] = False
 
     def show_section_questions(section_name):
         st.subheader('Section Questions')
@@ -71,10 +78,13 @@ def main():
             section_index = sections.index(st.session_state['section_name'])
 
         # print(f"Section {section_index}: {st.session_state['section_name']}") 
-        section = st.selectbox('Which section would you like?', options=sections, index=section_index, key='section-selector', help='Choose section' )
+        section_name = st.selectbox('Which section would you like?', options=sections, index=section_index, key='section-selector', help='Choose section' )
+        print(section_name)
+        st.session_state['section_name'] = section_name
+
 
         # Action buttons 
-        button_col1, button_col2 = st.columns([1,1])
+        button_col1, button_col2, button_col3 = st.columns([1,1,1])
 
         section_action = None
 
@@ -86,8 +96,12 @@ def main():
         with button_col2:
             if st.button("Test me!"):                
                 st.session_state['test_in_progress'] = True
+        with button_col3:
+            if st.button("Reset Test"):                
+                st.session_state['test_in_progress'] = False
+                section_action = reset_test
 
-        if st.session_state['test_in_progress']:            
+        if st.session_state['test_in_progress']:
             section_action = test_section
 
         if section_action is not None:
@@ -96,6 +110,8 @@ def main():
             st.write(section_name)
             section_action(section_name)
             st.html('</div>')
+
+        
 
     update_app()
 
