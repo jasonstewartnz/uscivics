@@ -881,7 +881,7 @@
             },
             {
                 "number": 97,
-                "question text": "Why does the flag have 50 stars?* ",
+                "question text": "Why does the flag have 50 stars?",
                 "possible answers": [
                     "because there is one star for each state ",
                     "because each star represents a state ",
@@ -902,9 +902,9 @@
         "questions": [
             {
                 "number": 99,
-                "question text": "When do we celebrate Independence Day?* ",
+                "question text": "When do we celebrate Independence Day?",
                 "possible answers": [
-                    "July 4 "
+                    "July 4"
                 ]
             },
             {
